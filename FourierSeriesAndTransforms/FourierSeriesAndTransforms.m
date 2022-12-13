@@ -60,7 +60,7 @@ N = 1e3;
 n = 0:N;
 
 a = 0.5;
-x = a.^n;
+x = a .^ n;
 
 figure('Name', 'Discrete Time Signal');
 stem(n, x, 'LineWidth', 1.5);
@@ -185,3 +185,121 @@ hold on;
 plot(t, real(x), 'LineWidth', 1.5);
 legend('Original Square Wave', 'Reconstructed Square Wave');
 xlim([-0.5, 0.5]);
+
+%% CTFT  extra points
+% CTFT of delta function
+fs = 1e3;
+N = 100;
+t = -N:1 / fs:N;
+x = zeros(size(t));
+x(t == 0) = fs;
+FT_x = fftshift(fft(x)) / fs;
+f_axis = linspace(-fs / 2, fs / 2, length(FT_x));
+
+figure('Name', 'CTFT of Delta Function  Wrong Answer');
+subplot(221);
+plot(f_axis, real(FT_x), 'LineWidth', 1.5);
+title('Real part of CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Real(CTFT)');
+grid on;
+
+subplot(222);
+plot(f_axis, imag(FT_x), 'LineWidth', 1.5);
+title('Imaginary part of CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Imaginary(CTFT)');
+grid on;
+
+subplot(223);
+plot(f_axis, abs(FT_x), 'LineWidth', 1.5);
+title('Magnitude of CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude(CTFT)');
+grid on;
+
+subplot(224);
+plot(f_axis, angle(FT_x), 'LineWidth', 1.5);
+title('Phase of CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Phase(CTFT)');
+grid on;
+
+% Constructing delta function using sinc function
+fs = 1e3;
+N = 100;
+t = -N:1 / fs:N;
+x = fs * sinc(fs * t);
+
+FT_x = fftshift(fft(x)) / fs;
+f_axis = linspace(-fs / 2, fs / 2, length(FT_x));
+
+figure('Name', 'CTFT of Delta Function(kernel = sinc) Wrong Answer');
+subplot(221);
+plot(f_axis, real(FT_x), 'LineWidth', 1.5);
+title('Real part of CTFT of Delta Function(kernel = sinc)');
+xlabel('Frequency (Hz)');
+ylabel('Real(CTFT)');
+grid on;
+
+subplot(222);
+plot(f_axis, imag(FT_x), 'LineWidth', 1.5);
+title('Imaginary part of CTFT of Delta Function(kernel = sinc)');
+xlabel('Frequency (Hz)');
+ylabel('Imaginary(CTFT)');
+grid on;
+
+subplot(223);
+plot(f_axis, abs(FT_x), 'LineWidth', 1.5);
+title('Magnitude of CTFT of Delta Function(kernel = sinc)');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude(CTFT)');
+grid on;
+
+subplot(224);
+plot(f_axis, angle(FT_x), 'LineWidth', 1.5);
+title('Phase of CTFT of Delta Function(kernel = sinc)');
+xlabel('Frequency (Hz)');
+ylabel('Phase(CTFT)');
+grid on;
+
+% True CTFT of delta function
+fs = 1e3;
+N = 100;
+t = -N:1 / fs:N;
+
+x = zeros(size(t));
+x(t == 0) = fs;
+FT_x = fftshift(fft(circshift(x, -floor(length(t) / 2)))) / fs;
+
+f_axis = linspace(-fs / 2, fs / 2, length(FT_x));
+
+figure('Name', 'True CTFT of Delta Function');
+subplot(221);
+plot(f_axis, real(FT_x), 'LineWidth', 1.5);
+title('Real part of True CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Real(CTFT)');
+grid on;
+
+subplot(222);
+plot(f_axis, imag(FT_x), 'LineWidth', 1.5);
+title('Imaginary part of True CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Imaginary(CTFT)');
+grid on;
+
+subplot(223);
+plot(f_axis, abs(FT_x), 'LineWidth', 1.5);
+title('Magnitude of True CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude(CTFT)');
+grid on;
+
+subplot(224);
+plot(f_axis, angle(FT_x), 'LineWidth', 1.5);
+title('Phase of True CTFT of Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Phase(CTFT)');
+grid on;
+
