@@ -1,9 +1,15 @@
 %% Fourier Series And Transforms
+%% Clearing the workspace
+close all;
+clear;
+clc;
+
 %% 1. Introduction to DFT and FFT (applicable approach)
 
 % In MATLAB both frequency and time axis are discrete. So we should use an
 % operation that is applicable to discrete signals. Just fourier series of
 % discrete signals has this property.
+figure;
 imshow("./images/DFT_MATLAB.png");
 
 %% 2. Fourier Series of Discrete Time Signals
@@ -303,3 +309,31 @@ xlabel('Frequency (Hz)');
 ylabel('Phase(CTFT)');
 grid on;
 
+% CTFT of shifted delta function
+fs = 1e3;
+N = 10;
+t = -N:1 / fs:N;
+x = zeros(size(t));
+x(t == 1) = fs;
+FT_x = fftshift(fft(circshift(x, -floor(length(t) / 2)))) / fs;
+f_axis = linspace(-fs / 2, fs / 2, length(FT_x));
+
+figure('Name', 'CTFT of Shifted Delta Function');
+subplot(211);
+plot(f_axis, abs(FT_x), 'LineWidth', 1.5);
+title('Magnitude of CTFT of Shifted Delta Function');
+xlabel('Frequency (Hz)');
+ylabel('Magnitude(CTFT)');
+ylim([0 1.5]);
+yticks([0 0.5 1 1.5]);
+yticklabels({'0', '0.5', '1', '1.5'});
+grid on;
+
+subplot(212);
+plot(f_axis, phase(FT_x), 'LineWidth', 1.5);
+title('Phase of CTFT of Shifted Delta Function');
+xlabel('Frequency (Hz)');
+yticks([-4 * pi -3 * pi -2 * pi -pi 0] * 500);
+yticklabels({'-2000\pi', '-1500\pi', '-1000\pi', '-500\pi', '0'});
+ylabel('Phase(CTFT)');
+grid on;
